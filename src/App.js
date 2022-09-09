@@ -10,7 +10,7 @@ export default function App() {
           Kenya's Dictionary App
         </header>
         <main>
-          <Dictionary />
+          <Dictionary defaultKeyword="sunset" />
         </main>
         <footer className="App-footer">
           <small>Coded with love by Kenya Caines</small>
