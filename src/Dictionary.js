@@ -7,7 +7,6 @@ import "./Dictionary.css";
 export default function Dictionary(props) {
   let [keyword, setKeyword] = useState(props.defaultKeyword);
   let [results, setResults] = useState(null);
-  let [loaded, setLoaded] = useState(false);
   let [photos, setPhotos] = useState(null);
 
   function handleDictionaryResponse(response) {
@@ -18,32 +17,23 @@ export default function Dictionary(props) {
     setPhotos(response.data.photos);
   }
 
-  function search() {
+  function handleSubmit(event) {
     //documentation: https://dictionaryapi.dev/
+    event.preventDefault();
     let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${keyword}`;
     axios.get(apiUrl).then(handleDictionaryResponse);
 
-    let pexelsApiKey =
+    const pexelsApiKey =
       "563492ad6f917000010000012030bb92ac324f17852dd972d5cd0197";
     let pexelsApiUrl = `https://api.pexels.com/v1/search?query=${keyword}&per_page=9`;
     let headers = { Authorization: `Bearer ${pexelsApiKey}` };
     axios.get(pexelsApiUrl, { headers: headers }).then(handlePexelsResponse);
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    search();
-  }
-
   function handleKeywordChange(event) {
     setKeyword(event.target.value);
   }
-  function load() {
-    setLoaded(true);
-    search();
-  }
 
-  if (loaded) {
     return (
       <div className="Dictionary">
         <section>
@@ -52,19 +42,13 @@ export default function Dictionary(props) {
             <input
               type="search"
               onChange={handleKeywordChange}
-              defaultValue={props.defaultKeyword}
+              autoFocus={true}
+              placeholder="Search for a word"
             />
           </form>
-          <div className="hint">
-            suggested words: sunset, forest, wine, yoga...
-          </div>
         </section>
         <Results results={results} />
         <Photos photos={photos} />
       </div>
     );
-  } else {
-    load();
-    return "Loading";
-  }
 }
