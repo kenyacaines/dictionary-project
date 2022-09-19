@@ -1,5 +1,5 @@
 body{
-background: #dad049fc;
+background: #E3941D;
 }
 
 .App{
@@ -9,6 +9,11 @@ background: #dad049fc;
 
 .App-header{
     margin: 30px 0;
+    font-family: marshmallow-fluff, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 96px;
+    color: #EDCB42;
 }
 .App-footer{
     text-align:center;
