@@ -5,7 +5,8 @@
 
 .Synonyms span {
   display: inline-block;
-  color: green;
+  color: #B3C342;
   padding-right: 15px;
   line-height: 1;
+  font-weight: 500;
 }
