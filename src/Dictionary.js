@@ -7,6 +7,7 @@ import "./Dictionary.css";
 export default function Dictionary(props) {
   let [keyword, setKeyword] = useState(props.defaultKeyword);
   let [results, setResults] = useState(null);
+  let [loaded, setLoaded] = useState(false);
   let [photos, setPhotos] = useState(null);
 
   function handleDictionaryResponse(response) {
@@ -17,9 +18,8 @@ export default function Dictionary(props) {
     setPhotos(response.data.photos);
   }
 
-  function handleSubmit(event) {
+  function search() {
     //documentation: https://dictionaryapi.dev/
-    event.preventDefault();
     let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${keyword}`;
     axios.get(apiUrl).then(handleDictionaryResponse);
 
@@ -29,26 +29,39 @@ export default function Dictionary(props) {
     let headers = { Authorization: `Bearer ${pexelsApiKey}` };
     axios.get(pexelsApiUrl, { headers: headers }).then(handlePexelsResponse);
   }
-
+  function handleSubmit(event) {
+    event.preventDefault();
+    search();
+  }
   function handleKeywordChange(event) {
     setKeyword(event.target.value);
   }
 
-    return (
-      <div className="Dictionary">
-        <section>
-          <h2>What word do you want to look up?</h2>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="search"
-              onChange={handleKeywordChange}
-              autoFocus={true}
-              placeholder="Search for a word"
-            />
-          </form>
-        </section>
-        <Results results={results} />
-        <Photos photos={photos} />
-      </div>
-    );
+  function load() {
+    setLoaded(true);
+    search();
+  }
+
+  if (loaded){
+  return (
+    <div className="Dictionary">
+      <section>
+        <h2>What word do you want to look up, friend?</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="search"
+            onChange={handleKeywordChange}
+            defaultValue={props.defaultKeyword}
+            placeholder="Search for a word"
+          />
+        </form>
+      </section>
+      <Results results={results} />
+      <Photos photos={photos} />
+    </div>
+  );
+} else {
+    load();
+    return "Loading";
+  }
 }
